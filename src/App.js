@@ -1,25 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { createContext, useState } from 'react';
 import './App.css';
-
+import Home from './Components/Home/Home';
+import NotFound from './Components/NotFound/NotFound';
+import Auth from './Components/Auth/Auth';
+import RegistationForm from './Components/RegistationForm/RegistationForm';
+import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
+import Events from './Components/Events/Events';
+import AdminPanel from './Components/AdminPanel/AdminPanel';
+import {BrowserRouter as Route, Router, Switch } from 'react-router-dom';
+export const UserContext = createContext()
 function App() {
+  const [user,setUser]=useState({isSignedUp:true})
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={[user,setUser]}>
+      <Router>
+
+      <Switch>
+        <Route exact path='/'>
+          <Home></Home>
+        </Route>
+
+        <Route exact path='/auth'>
+          <Auth></Auth>
+        </Route>
+
+        <PrivateRoute exact path='/registation-form'>
+          <RegistationForm></RegistationForm>
+        </PrivateRoute>
+
+        <PrivateRoute exact path='/events'>
+          <Events></Events>
+        </PrivateRoute>
+
+        <PrivateRoute exact path='/admin-panel'>
+          <AdminPanel></AdminPanel>
+        </PrivateRoute>
+
+        <Route path='*'>
+          <NotFound></NotFound>
+        </Route>
+
+      </Switch>
+      </Router>
+    </UserContext.Provider>
   );
 }
 
